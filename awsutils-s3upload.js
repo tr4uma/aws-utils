@@ -4,6 +4,7 @@
 const program = require('commander')
 const AWS = require('aws-sdk')
 const fs = require('fs')
+const path = require('path')
 
 program
   .option('-s, --source <sourceDir>', 'Specify the directory containing all resources')
@@ -23,6 +24,7 @@ const s3Config = JSON.parse(fs.readFileSync(__dirname+'/configs/aws-config.json'
 const sourceDir = program.sourceDir ? program.sourceDir : './'
 const targetDir = program.targetDir ? program.targetDir : s3Config.targetFolder
 const bucketName = program.bucketName ? program.bucketName : s3Config.bucketName
+const contentTypes = JSON.parse(fs.readFileSync(__dirname+'/configs/contentypes.json', 'utf8'))
 
 readFilesFromLocalFolder(sourceDir, targetDir, errorLogging)
 
@@ -41,12 +43,13 @@ async function readFilesFromLocalFolder(sourcePath, bucketName, targetPath, onEr
 function parallelUploadToS3(sourcePath, bucketName, targetPath, filename) {
   return new Promise((resolve, reject) => {
     let fileStream = fs.createReadStream(sourcePath + filename)
+    let extension = path.extname('index.html').substr(1)
     s3.upload({
         Bucket: bucketName,
         Key: targetPath+'/'+filename,
         Body: fileStream,
         ACL: 'public-read',
-        ContentType: 'image/jpeg'
+        ContentType: contentTypes[extension]
       }, function (err, data) {
         if (err) {
           console.log('ERROR UPLOADING FILE '+filename+':', err)
