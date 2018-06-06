@@ -1,0 +1,29 @@
+{
+  "name": "aws-utils",
+  "version": "1.0.0",
+  "description": "An importer for resources to an s3 bucket",
+  "main": "index.js",
+  "bin": {
+    "awsutils": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "xml",
+    "virtual",
+    "manual",
+    "importer"
+  ],
+  "author": "Marco Dagrada",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.250.1",
+    "commander": "^2.15.1",
+    "fs": "0.0.1-security",
+    "lodash": "^4.17.10",
+    "npm": "^6.1.0",
+    "path": "^0.12.7",
+    "replacestream": "^4.0.3"
+  }
+}
