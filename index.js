@@ -6,5 +6,5 @@ const program = require('commander')
 
 program
 	.version('0.0.1')
-	.command('resources','Upload resources to s3 bucket')
+	.command('s3upload','Upload resources to s3 bucket')
 	.parse(process.argv)
