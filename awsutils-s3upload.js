@@ -27,7 +27,7 @@ const bucketName = program.bucketName ? program.bucketName : s3Config.bucketName
 readFilesFromLocalFolder(sourceDir, targetDir, errorLogging)
 
 async function readFilesFromLocalFolder(sourcePath, bucketName, targetPath, onError) {
-  fs.readdir(folderPath, async function(err, filenames) {
+  fs.readdir(sourcePath, async function(err, filenames) {
     if (err) {
       onError(err)
       return
