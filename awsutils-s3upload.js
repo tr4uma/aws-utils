@@ -7,10 +7,10 @@ const fs = require('fs')
 const path = require('path')
 
 program
-  .option('-s, --source <sourceDir>', 'Specify the directory containing all resources')
-  .option('-t, --target <targetDir>', 'Specify the target directory where data will be uploaded')
-  .option('-c, --config <awsConfig>', 'AWS configuration file')
-  .option('-b, --bucket <bucketName>', 'S3 Bucket name')
+  .option('-s, --sourceDir <sourceDir>', 'Specify the directory containing all resources')
+  .option('-t, --targetDir <targetDir>', 'Specify the target directory where data will be uploaded')
+  .option('-c, --awsConfig <awsConfig>', 'AWS configuration file')
+  .option('-b, --bucketName <bucketName>', 'S3 Bucket name')
   .parse(process.argv)
 
 
@@ -26,7 +26,7 @@ const targetDir = program.targetDir ? program.targetDir : s3Config.targetFolder
 const bucketName = program.bucketName ? program.bucketName : s3Config.bucketName
 const contentTypes = JSON.parse(fs.readFileSync(__dirname+'/configs/contentypes.json', 'utf8'))
 
-readFilesFromLocalFolder(sourceDir, targetDir, errorLogging)
+readFilesFromLocalFolder(sourceDir, bucketName, targetDir, errorLogging)
 
 async function readFilesFromLocalFolder(sourcePath, bucketName, targetPath, onError) {
   fs.readdir(sourcePath, async function(err, filenames) {
@@ -43,7 +43,7 @@ async function readFilesFromLocalFolder(sourcePath, bucketName, targetPath, onEr
 function parallelUploadToS3(sourcePath, bucketName, targetPath, filename) {
   return new Promise((resolve, reject) => {
     let fileStream = fs.createReadStream(sourcePath + filename)
-    let extension = path.extname('index.html').substr(1)
+    let extension = path.extname(filename).substr(1)
     s3.upload({
         Bucket: bucketName,
         Key: targetPath+'/'+filename,
